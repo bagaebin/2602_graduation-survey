@@ -235,6 +235,15 @@
     return points;
   }
 
+  function rankingTop(rows, fieldName, labels) {
+    const scores = scoreRanking(rows, fieldName, labels);
+    const top = Object.entries(scores).sort((a, b) => b[1] - a[1])[0] || ["-", 0];
+    const validCount = rows.filter((row) =>
+      labels.some((label) => Number.isFinite((row[fieldName] || {})[label]))
+    ).length;
+    return { scores, top, validCount };
+  }
+
   function setFiltersPanelOpen(isOpen) {
     filtersPanel.classList.toggle("is-open", isOpen);
     filtersBackdrop.classList.toggle("is-open", isOpen);
@@ -627,10 +636,10 @@
     const topTotalBudget = Object.entries(totalCounts).sort((a, b) => b[1] - a[1])[0] || ["-", 0];
     const topTotalBudgetPct = proportionPct(topTotalBudget[1], totalValid);
 
-    const expectScores = scoreRanking(rows, "expectation_ranking", data.labels.expectations);
-    const concernScores = scoreRanking(rows, "concern_ranking", data.labels.concerns);
-    const topExpectation = Object.entries(expectScores).sort((a, b) => b[1] - a[1])[0] || ["-", 0];
-    const topConcern = Object.entries(concernScores).sort((a, b) => b[1] - a[1])[0] || ["-", 0];
+    const expectInfo = rankingTop(rows, "expectation_ranking", data.labels.expectations);
+    const concernInfo = rankingTop(rows, "concern_ranking", data.labels.concerns);
+    const topExpectation = expectInfo.top;
+    const topConcern = concernInfo.top;
 
     const programRows = rows.reduce((acc, row) => {
       if (!acc[row.program]) acc[row.program] = [];
@@ -702,9 +711,13 @@
       `예산은 ${key(`개인 부담 5~20만 원(${fmt(personal5to20Pct, 1)}%)`)}에 집중되며, 총 부담 가능 금액은 ${key(
         `${escapeHtml(topTotalBudget[0])}(${fmt(topTotalBudgetPct, 1)}%)`
       )}이 최빈이다.`,
-      `기대 요인의 중심은 ${key(`${escapeHtml(topExpectation[0])}(${topExpectation[1]}점)`)}, 우려 요인의 중심은 ${key(
-        `${escapeHtml(topConcern[0])}(${topConcern[1]}점)`
-      )}이다.`,
+      `기대 요인의 중심은 ${
+        expectInfo.validCount > 0
+          ? key(`${escapeHtml(topExpectation[0])}(${topExpectation[1]}점)`)
+          : key("응답 없음")
+      }, 우려 요인의 중심은 ${
+        concernInfo.validCount > 0 ? key(`${escapeHtml(topConcern[0])}(${topConcern[1]}점)`) : key("응답 없음")
+      }이다.`,
       art && prof
         ? `과정별로는 ${key(`${escapeHtml(art.program)} ${escapeHtml(art.top.label)}(${fmt(art.top.mean)})`)}, ${key(
             `${escapeHtml(prof.program)} ${escapeHtml(prof.top.label)}(${fmt(prof.top.mean)})`
