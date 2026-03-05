@@ -1,0 +1,73 @@
+<!doctype html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>졸업전시 설문 리포트</title>
+    <link rel="stylesheet" href="styles.css" />
+    <script src="https://cdn.plot.ly/plotly-2.35.2.min.js"></script>
+    <script defer src="survey-data.js"></script>
+    <script defer src="app.js"></script>
+  </head>
+  <body>
+    <main class="layout">
+      <div id="filtersBackdrop" class="filters-backdrop" aria-hidden="true"></div>
+      <section id="filtersPanel" class="panel filters-panel" aria-hidden="true">
+        <div class="panel-title-wrap">
+          <h2 class="panel-title">필터</h2>
+          <div class="panel-actions">
+            <button id="resetFilters" class="mini-btn" type="button">필터 초기화</button>
+            <button id="closeFilters" class="mini-btn" type="button" aria-label="필터 닫기">닫기</button>
+          </div>
+        </div>
+        <div id="filterContainer" class="filters"></div>
+      </section>
+
+      <section class="grid">
+        <article class="panel chart-card">
+          <h2 class="panel-title">전시 방식 선호 점수 평균 (95% CI)</h2>
+          <div id="modeTopChart" class="chart"></div>
+        </article>
+
+        <article class="panel chart-card">
+          <h2 class="panel-title">분류 비교 Dot Plot (오프라인 입장, CI, n)</h2>
+          <div id="groupDotChart" class="chart"></div>
+        </article>
+
+        <article class="panel chart-card">
+          <h2 class="panel-title">운영/인력 태도 분포 (Diverging 100%)</h2>
+          <div id="opsChart" class="chart"></div>
+        </article>
+
+        <article class="panel chart-card">
+          <h2 class="panel-title">개인 부담 적정 금액 (유효응답 비율)</h2>
+          <p class="chart-question">오프라인 전시 진행을 위해 졸업예정생 개인 부담금이 발생할 경우, 적정한 금액은 얼마일까요?</p>
+          <div id="personalBudgetChart" class="chart"></div>
+        </article>
+
+        <article class="panel chart-card">
+          <h2 class="panel-title">총 부담 가능 금액 (유효응답 비율)</h2>
+          <p class="chart-question">오프라인 전시 진행을 위해 부담할 수 있는 총 금액은 얼마이신가요?</p>
+          <div id="totalBudgetChart" class="chart"></div>
+        </article>
+
+        <article class="panel chart-card">
+          <h2 class="panel-title">졸업전시 기대 요소 (가중 점수)</h2>
+          <p class="chart-question">졸업전시에서 기대하는 점은 무엇인가요?</p>
+          <div id="expectChart" class="chart"></div>
+        </article>
+
+        <article class="panel chart-card">
+          <h2 class="panel-title">졸업전시 우려 요소 (가중 점수)</h2>
+          <p class="chart-question">졸업전시 준비 과정에서 가장 우려되는 점은 무엇인가요?</p>
+          <div id="concernChart" class="chart"></div>
+        </article>
+      </section>
+
+      <section class="panel insight-panel">
+        <h2 class="panel-title">현재 필터 기준 핵심 인사이트</h2>
+        <ul id="insightList" class="insight-list"></ul>
+      </section>
+    </main>
+  </body>
+</html>
