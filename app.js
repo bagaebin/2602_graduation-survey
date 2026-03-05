@@ -629,8 +629,8 @@
 
     const expectScores = scoreRanking(rows, "expectation_ranking", data.labels.expectations);
     const concernScores = scoreRanking(rows, "concern_ranking", data.labels.concerns);
-    const topExpectation = expectScores[0] || ["-", 0];
-    const topConcern = concernScores[0] || ["-", 0];
+    const topExpectation = Object.entries(expectScores).sort((a, b) => b[1] - a[1])[0] || ["-", 0];
+    const topConcern = Object.entries(concernScores).sort((a, b) => b[1] - a[1])[0] || ["-", 0];
 
     const programRows = rows.reduce((acc, row) => {
       if (!acc[row.program]) acc[row.program] = [];
